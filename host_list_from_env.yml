@@ -1,0 +1,2 @@
+# Use our inventory plugin
+plugin: host_list_from_env
