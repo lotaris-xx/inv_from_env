@@ -1,0 +1,6 @@
+# Sample Playbook for the inv_from_env code
+- hosts: all
+  gather_facts: false
+  tasks:
+    - name: Test ansible connectivity
+      ping:
