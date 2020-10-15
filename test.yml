@@ -1,3 +1,80 @@
-- hosts: all
+# Create an inventory, source and template
+# Call something like: ansible-playbook -i localhost, test.yml -e "host_list=server1,server2"
+
+- hosts: localhost
+  gather_facts: false
+  vars_files:
+    - vars.yml
   tasks:
-    - ping:
+    - name: Create an inventory
+      uri:
+        url: "{{ tower_url_inventory }}"
+        user: "{{ tower_user }}"
+        password: "{{ tower_passwd }}"
+        force_basic_auth: true
+        method: POST
+        body_format: json
+        body:
+          name: Inv_from_env
+          description: Inventory from Environment Var
+          organization: "{{ tower_org }}"
+        status_code:
+          - 201
+        validate_certs: false
+      register: tower_inventory_out
+      delegate_to: localhost
+
+    - name: Attach a source
+      uri:
+        url: "{{ tower_url_inventory_source }}"
+        user: "{{ tower_user }}"
+        password: "{{ tower_passwd }}"
+        force_basic_auth: true
+        method: POST
+        body_format: json
+        body:
+          name: Inv_from_env
+          description: Inventory from Environment Var
+          organization: "{{ tower_org}}"
+          source: scm
+          source_path: host_list_from_env.yml
+          source_vars: "---\nhost_list: {{ host_list }}"
+          credential: null
+          overwrite: true
+          timeout: 0
+          verbosity: 1
+          inventory: "{{ tower_inventory_out.json.id }}"
+          update_on_launch: true
+          update_cache_timeout: 0
+          source_project: "{{ tower_project_id }}"
+        status_code:
+          - 201
+        validate_certs: false
+      register: tower_inventory_source_out
+      delegate_to: localhost
+
+    - name: Create a job template
+      meta: noop
+
+    - name: Launch the job template
+      meta: noop
+
+    - name: Grab results
+      meta: noop
+
+    - name: Print results
+      meta: noop
+
+    - name: Remove inventory
+      uri:
+        url: "{{ tower_url_inventory }}{{ tower_inventory_out.json.id }}/"
+        user: "{{ tower_user }}"
+        password: "{{ tower_passwd }}"
+        force_basic_auth: true
+        method: DELETE
+        body_format: json
+        status_code:
+          - 202
+        validate_certs: false
+      register: tower_inventory_out
+      delegate_to: localhost
