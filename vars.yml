@@ -1,6 +1,7 @@
 tower_url: https://tower/api/v2
 tower_url_inventory: "{{ tower_url }}/inventories/"
 tower_url_inventory_source: "{{ tower_url }}/inventory_sources/"
+tower_url_job: "{{ tower_url }}/jobs/"
 tower_url_job_template: "{{ tower_url }}/job_templates/"
 tower_url_job_template_credentials: "{{ tower_url }}/job_templates/{{ tower_job_template_out.json.id }}/credentials/"
 tower_url_job_template_launch: "{{ tower_url }}/job_templates/{{ tower_job_template_out.json.id }}/launch/"

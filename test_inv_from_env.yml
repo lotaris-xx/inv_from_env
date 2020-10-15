@@ -101,13 +101,37 @@
         status_code:
           - 201
         validate_certs: false
+      register: tower_job_template_launch_out
       delegate_to: localhost
 
-    - name: Grab results
-      meta: noop
+    - name: Wait until job is finished
+      uri:
+        url: "{{ tower_url_job }}{{ tower_job_template_launch_out.json.id }}/"
+        user: "{{ tower_user }}"
+        password: "{{ tower_passwd }}"
+        force_basic_auth: true
+        method: GET
+        validate_certs: false
+      register: tower_job_status_out
+      until: "tower_job_status_out.json.finished"
+      retries: 10
+      delegate_to: localhost
 
-    - name: Print results
-      meta: noop
+    - name: Grab stdout
+      uri:
+        url: "{{ tower_url_job }}{{ tower_job_template_launch_out.json.id }}/stdout/?format=txt"
+        user: "{{ tower_user }}"
+        password: "{{ tower_passwd }}"
+        force_basic_auth: true
+        method: GET
+        validate_certs: false
+        return_content: true
+      register: tower_job_stdout
+      delegate_to: localhost
+
+    - name: Print stdout
+      debug:
+        msg: "{{ tower_job_stdout.content.split('\n') }}"
 
     - name: Remove job template
       uri:
