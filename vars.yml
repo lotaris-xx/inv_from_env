@@ -1,7 +1,9 @@
 tower_url: https://tower/api/v2
 tower_url_inventory: "{{ tower_url }}/inventories/"
 tower_url_inventory_source: "{{ tower_url }}/inventory_sources/"
-tower_url_job_template: "{{ tower_url }}/"
+tower_url_job_template: "{{ tower_url }}/job_templates/"
+tower_url_job_template_credentials: "{{ tower_url }}/job_templates/{{ tower_job_template_out.json.id }}/credentials/"
+tower_url_job_template_launch: "{{ tower_url }}/job_templates/{{ tower_job_template_out.json.id }}/launch/"
 tower_url_project: "{{ tower_url }}/projects/"
 
 tower_user: !vault |
@@ -21,3 +23,4 @@ tower_passwd: !vault |
 
 tower_org: 1
 tower_project_id: 18
+tower_test_credential_id: 2
