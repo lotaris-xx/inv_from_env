@@ -84,8 +84,7 @@
         force_basic_auth: true
         method: POST
         body_format: json
-        body:
-          id: "{{ tower_test_credential_id }}"
+        body: '{ "id": {{ tower_test_credential_id |int }} }'
         status_code:
           - 204
         validate_certs: false
