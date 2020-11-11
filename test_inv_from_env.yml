@@ -69,7 +69,7 @@
           inventory: "{{ tower_inventory_out.json.id }}"
           organization: "{{ tower_org}}"
           project: "{{ tower_project_id }}"
-          playbook: "ping.yml"
+          playbook: ping.yml
         status_code:
           - 201
         validate_certs: false
@@ -109,7 +109,7 @@
         method: GET
         validate_certs: false
       register: tower_job_status_out
-      until: "tower_job_status_out.json.finished"
+      until: tower_job_status_out.json.finished
       retries: 10
 
     - name: Grab stdout
