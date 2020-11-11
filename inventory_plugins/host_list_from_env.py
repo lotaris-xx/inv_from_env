@@ -20,7 +20,7 @@ DOCUMENTATION = '''
 
 EXAMPLES = '''
     # simple range
-    # HOST_LIST_VAR="foo.example.com,bar.exampe.com" ansible-playbook -i host_list_from_env.yml test.yml
+    # HOST_LIST_VAR="foo.example.com,bar.exampe.com" ansible-playbook -i host_list_from_env.yml test.yml --ask-vault-pass
 '''
 
 import os
