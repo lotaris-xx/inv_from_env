@@ -9,6 +9,8 @@
   gather_facts: false
   vars_files:
     - vars.yml
+  vars:
+    ansible_connection: local
   tasks:
     - name: Create an inventory
       uri:
@@ -26,7 +28,6 @@
           - 201
         validate_certs: false
       register: tower_inventory_out
-      delegate_to: localhost
 
     - name: Attach a source
       uri:
@@ -52,7 +53,6 @@
           - 201
         validate_certs: false
       register: tower_inventory_source_out
-      delegate_to: localhost
 
     - name: Create a job template
       uri:
@@ -74,7 +74,6 @@
           - 201
         validate_certs: false
       register: tower_job_template_out
-      delegate_to: localhost
 
     - name: Attach credential to job template
       uri:
@@ -88,7 +87,6 @@
         status_code:
           - 204
         validate_certs: false
-      delegate_to: localhost
 
     - name: Launch the job template
       uri:
@@ -101,7 +99,6 @@
           - 201
         validate_certs: false
       register: tower_job_template_launch_out
-      delegate_to: localhost
 
     - name: Wait until job is finished
       uri:
@@ -114,7 +111,6 @@
       register: tower_job_status_out
       until: "tower_job_status_out.json.finished"
       retries: 10
-      delegate_to: localhost
 
     - name: Grab stdout
       uri:
@@ -126,7 +122,6 @@
         validate_certs: false
         return_content: true
       register: tower_job_stdout
-      delegate_to: localhost
 
     - name: Print stdout
       debug:
@@ -142,7 +137,6 @@
         status_code:
           - 204
         validate_certs: false
-      delegate_to: localhost
 
     - name: Remove inventory
       uri:
@@ -154,4 +148,3 @@
         status_code:
           - 202
         validate_certs: false
-      delegate_to: localhost
